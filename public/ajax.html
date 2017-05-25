@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="./javascript/jquery-2.1.4.min.js"></script>
+  <script>
+  //Ajax应用
+	function dian(){
+		//$('#dd').load('./hello.html');
+    $.get('/hello',function(rhtml){  //get方式
+      alert(rhtml);
+      $('#dd').html(rhtml);//用字符串的形式，以html文件放到div里
+      $('#dd').text(rhtml);//用字符串的形式，以文本文件放到div里
+    })
+     $.post('/zhuce',{email:'dd',pwd:'aa'},function(rhtml){
+        if(rhtml==0){  //用post的方式提交
+          alert('注册成功'); 
+        }
+     })
+	}
+  </script>
+ </head>
+ <body>
+ <a href='#' onclick='dian()'>装载</a>
+  <div id='dd' style="width:800px;height:600px;border:1px solid blue">
+  </div>
+ </body>
+</html>
