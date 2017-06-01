@@ -1,9 +1,0 @@
-1.创建socket文件夹
-2.文件夹下打开dos，执行npm init 一路回车
-3.安装net
-npm install net --save-dev
-4.安装socket.io
-npm install "socket.io" --save-dev
-5.安装Express
-npm install express --save-dev
-
