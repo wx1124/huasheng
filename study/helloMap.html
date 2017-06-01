@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+ <head>
+ <meta charset="UTF-8">
+  <title>Document</title>
+  <script>
+	window.onload=function(){
+		var obj = {id:1,name:'张三',age:20};
+		obj.arr = [1,2,3,4,5];
+		obj.uinfo = {work:'程序员',address:'济南'};
+		obj.play = function(){
+			alert(this.name+'踢球');
+		}
+		/*obj.id=1;
+		obj.name='张三';//obj['name']='张三';
+		obj.age=20;*/
+		//alert(obj.uinfo.work);
+		//obj.play();
+		//var a = 3;定义为整型数据
+		//------------方法-----------
+		var a = function(m,n){
+			alert(m+n);
+		}
+		var b = function(){
+			//---------查库--------
+			fun(3,9);
+		}
+		//--------闭包----------把值存住，初始值留住
+		var c = function(i){
+			function myfun(){
+				//alert('我是myfun');
+				alert(i++);
+			}
+			return myfun;
+		}
+		var fun = c(3);//执行结果为3
+		fun();fun();//执行结果为4
+		var fun1 = c(30);
+		fun1();fun1();fun();
+	}
+	function bibao(ii){
+		return function(){
+			alert(++ii);
+		}
+	}
+	var afun = bibao(1);
+	var bfun = bibao(100);
+	function aa(){
+		afun();
+	}
+	function bb(){
+		bfun();
+	}
+  </script>
+ </head>
+ <body>
+  <input type='button' value='a++' onclick='aa()'/>
+  <input type='button' value='a++' onclick='bb()'/>
+ </body>
+</html>

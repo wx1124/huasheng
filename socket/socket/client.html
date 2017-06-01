@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="./js/jquery-1.3.1.min.js"></script>
+  <script src="./js/socket.io.js"></script>
+  <script src="./jspb/long.min.js"></script>     
+  <script src="./jspb/ByteBuffer.min.js"></script>     
+  <script src="./jspb/ProtoBuf.min.js"></script>
+  <script>
+	//------------初始化pb-----------------------
+	if (typeof dcodeIO === 'undefined' || !dcodeIO.ProtoBuf) {
+		alert('出错');    
+		throw(new Error("ProtoBuf.js is not present. Please see www/index.html for manual setup instructions.")); 
+	}    
+	// 创建ProtoBuf    
+	var ProtoBuf = dcodeIO.ProtoBuf; 
+	var UserModel = ProtoBuf.loadProtoFile("./pb.proto").build('protobuf.User'); 
+	//-------------------------------------------
+	var iosocket=null;
+        $(function(){
+			iosocket = io.connect('http://localhost:9000/');
+			iosocket.on('connect', function () {
+                iosocket.on('message', function(message) {
+                    alert(message);
+					var userbuf = UserModel.decode(message);
+					alert(userbuf.uname);
+                });
+				iosocket.on('disconnect', function() {
+                    alert('和服务器失去连接');
+                });
+			})
+		});
+		function say(){
+			user = new UserModel();    
+			user.uid=111;    
+			user.uname='张三';    
+			user.pwd='aaa';
+			var buffer = user.encode().toBuffer();
+			iosocket.send(buffer);
+		}
+    </script>
+ </head>
+ <body>
+  <input type='button' value='说' onclick='say()'/>
+ </body>
+</html>

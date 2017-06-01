@@ -1,0 +1,7 @@
+package protobuf;
+ 
+message User {
+  required int32 uid = 1 [default = 42];
+  required string uname = 2;
+  optional string pwd = 3;
+}

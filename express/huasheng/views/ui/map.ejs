@@ -1,0 +1,32 @@
+<script>
+        var map = new AMap.Map('mapContainer', {
+		view: new AMap.View2D({
+		center: new AMap.LngLat(<%-shopRs[0].lng%>, <%-shopRs[0].lat%>),
+		zoom: 18
+	})
+ });	
+   	 AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+      function(){
+        map.addControl(new AMap.ToolBar());
+        map.addControl(new AMap.Scale());
+        map.addControl(new AMap.OverView({isOpen:true}));
+   });
+
+   	 function eventHandler(e){
+		//alert(e.lng);
+		//$('#myModal').modal('show');
+		pubform.lng.value=e.lnglat.getLng();
+		pubform.lat.value=e.lnglat.getLat();
+		//$('#point').val(evt.lnglat);
+	}
+	    function dian(){
+		var marker = new AMap.Marker({                 
+		  map:map,                 
+		  position:evt.lnglat,  
+		  title:$('#name').val(),
+		  icon:"http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",//图标
+		  offset:new AMap.Pixel(-10, -20)
+	   }); 
+		marker.setMap(map);
+	}
+</script>
