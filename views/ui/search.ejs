@@ -1,14 +1,15 @@
 <script>
+
     function onSubSearch(){
         if(searchForm.seachTarget.value==1){
-            searchForm.action='search/goods';
+            searchForm.action='/search/goods';
         }else{
-            searchForm.action='search/shop';
+            searchForm.action='/search/shop';
         }
         return true;
     }
 </script>
-<form id='searchForm' name='searchForm' method='get' action='search/goods' onsubmit="return onSubSearch();">
+<form id='searchForm' name='searchForm' method='get' action='/search/goods' onsubmit="return onSubSearch();">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
             
@@ -35,4 +36,3 @@
         </div><!-- /.row -->
 </form>
     
-            

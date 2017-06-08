@@ -1,35 +1,13 @@
 var express = require('express');
 var router = express.Router();
-// var Sequelize =require('sequelize');
-var sequelize = require('../models/ModelHeader')();
+//var Sequelize = require('sequelize');
 var Users = require('../models/UserModel');
 
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-	res.send('respond with a resource');
-
+  res.send('respond with a resource');
 });
-router.get('/logout', function(req, res, next) {
-	delete req.session.loginbean;
-	res.redirect('/');
-});
-router.post('/login', function(req, res, next) {
-	Users.findOne({where:{email:req.body.email,pwd:req.body.pwd}}).then(function(rs){
-		if(rs!=null){
-			loginbean=new Object();
-			loginbean.id = rs.id;
-			loginbean.nicheng = rs.nicheng;
-			loginbean.role = rs.role;
-			loginbean.msgnum = rs.msgnum;
-			req.session.loginbean=loginbean;
-			
-			res.redirect('/');
-		}else{
-			res.send("<script>alert('email/密码错误');location.href='/';</script>");
-		}
-	});
-})
 
 router.post('/zhuce', function(req, res, next) {
 	Users.create(req.body).then(function(rs){
@@ -48,6 +26,25 @@ router.post('/zhuce', function(req, res, next) {
 		
 	})
 });
+router.post('/login', function(req, res, next) {
+	Users.findOne({where:{email:req.body.email,pwd:req.body.pwd}}).then(function(rs){
+		if(rs!=null){
+			loginbean=new Object();
+			loginbean.id = rs.id;
+			loginbean.nicheng = rs.nicheng;
+			loginbean.role = rs.role;
+			loginbean.msgnum = rs.msgnum;
+			req.session.loginbean=loginbean;
+			res.redirect(req.body.url);
+		}else{
+			res.send("<script>alert('email/密码错误');location.href='/';</script>");
+		}
+	});
+})
 
+router.get('/logout', function(req, res, next) {
+	delete req.session.loginbean;
+	res.redirect('/');
+})
 
 module.exports = router;

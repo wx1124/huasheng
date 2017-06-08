@@ -2,19 +2,19 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-//cookie  存储在浏览器里的信息   清除缓存就是清除cookie
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var session = require('express-session');
-//定义声明路由  var 路由名 =  require ();
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 var home = require('./routes/home');
 var admin = require('./routes/admin');
 var msg = require('./routes/msg');
-var ueditor = require("ueditor");
 var search = require('./routes/search');
+var pay = require('./routes/pay');
+//加载ueditor 模块  
+var ueditor = require("ueditor");  
 
 var app = express();
 
@@ -28,7 +28,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//cookie说明  
 app.use(session({secret: 'recommand 128 bytes random string', // 建议使用 128 个字符的随机字符串    
 cookie: { maxAge: 20 * 60 * 1000 }, //cookie生存周期20*60秒    
 resave: true,  //cookie之间的请求规则,假设每次登陆，就算会话存在也重新保存一次    
@@ -36,6 +35,7 @@ saveUninitialized: true //强制保存未初始化的会话到存储器
 }));  //这些是写在app.js里面的 
 app.use(express.static(path.join(__dirname, 'public')));
 
+//使用模块  
 app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, res, next) {  
     // ueditor 客户发起上传图片请求  
     if (req.query.action === 'uploadimage') {  
@@ -60,11 +60,11 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), function (req, re
     }  
 }));  
 
-//拦截器 
-var openPage = ['/','/users/zhuce','/users/login','/users/logout','/search/goods','/search/shop'];
+
+var openPage = ['/','/aa','/users/zhuce','/users/login','/users/logout','/search/goods','/search/shop','/pay/putshopping'];
 app.use(function(req, res, next) {
 	var url = req.originalUrl;
-  url = url.split('?')[0];//分割成数组 将问号前面的打印出来
+  url = (url.split('?'))[0];
 	if(openPage.indexOf(url)>-1){
   		next();
   	}else{
@@ -75,13 +75,14 @@ app.use(function(req, res, next) {
 	  	}
   	}
 });
-//使用路由  app.use();
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/home', home);
 app.use('/admin', admin);
 app.use('/msg', msg);
 app.use('/search', search);
+app.use('/pay',pay);
 
 // catch 404 and forward to error handler
 

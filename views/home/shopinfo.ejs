@@ -1,40 +1,35 @@
+<link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+<script type="text/javascript"
+            src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56"></script>
 
-   <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
-    <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
-   <script src="http://webapi.amap.com/maps?v=1.3&key=ebb3310e602e7027987911af5e30be56&&plugin=AMap.Scale,AMap.OverView,AMap.ToolBar"></script>
+<div id='toolbar' style='font-size:2em'>
+	    <button type="button" class="btn btn-primary">店铺信息修改</button>&nbsp;
+	    <button type="button" class="btn btn-primary">关停店铺</button>&nbsp;
+	    <button type="button" class="btn btn-primary">店铺搬家</button>
+</div>
+<div id="mapContainer" style='margin-top:86px;margin-left:12px;width:100%;height:600px'></div>
 <script>
-	function changeinfo(){
-	var form1 =document.getElementById("closeform");
-       form1.style.display="none";
-       var form2 =document.getElementById("changeform");
-       form2.style.display="block";
-	//$('#pubform').style.display='none';	
-}
-function closeshop(){
-	var ui1 =document.getElementById("changeform");
-	ui1.style.display="none";
-	var ui2 =document.getElementById("closeform");
-	ui2.style.display="block";
-}
+	//初始化地图对象，加载地图
+var map = new AMap.Map('mapContainer', {
+	view: new AMap.View2D({
+		center: new AMap.LngLat(<%-shopRs[0].lng%>, <%-shopRs[0].lat%>),
+		zoom: 18
+	})
+});
+var marker = new AMap.Marker({                 
+		  map:map,                 
+		  position: [<%-shopRs[0].lng%>, <%-shopRs[0].lat%>],  
+		  title:"<%-shopRs[0].shopname%>",
+		  icon:"http://webapi.amap.com/images/0.png",
+		  offset:new AMap.Pixel(-10, -20)
+	   });
+marker.setLabel({
+	        offset: new AMap.Pixel(-20, -20),
+	        content: "<%-shopRs[0].shopname%>"
+	    }); 
 
-</script>
-   <div id="toolbar" style="font-size: 1.5em">
-    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#myModal"onclick="changeinfo()">店铺信息修改 
-    </button>&nbsp;
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"onclick="closeshop()">关停店铺</button>&nbsp;
-    <button type="button" class="btn btn-primary" id="move" onclick="moveshop()">店铺搬家</button>
-    </div>
-  <div id="mapContainer" style="margin-top: 20px;margin-left: 12px;width: 100%;height: 500px;"></div>
-	   <script>
-   			 //初始化地图对象，加载地图
-   		 var map = new AMap.Map('mapContainer', {
-			view: new AMap.View2D({
-			center: new AMap.LngLat(<%-shopRs[0].lng%>, <%-shopRs[0].lat%>),
-			zoom: 18
-    })
-	 });	
-   	 AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
-      function(){
+AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
+    function(){
         map.addControl(new AMap.ToolBar());
 
         map.addControl(new AMap.Scale());
@@ -42,170 +37,11 @@ function closeshop(){
         map.addControl(new AMap.OverView({isOpen:true}));
 });
 
-
-   	window.onload=function(e){
-   		 var marker = new AMap.Marker({                 
-		  map:map,                 
-		  position:[<%-shopRs[0].lng%>, <%-shopRs[0].lat%>],  
-		  title:'<%-shopRs[0].shopname%>',
-		  icon:"http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",//图标
-		  offset:new AMap.Pixel(-10, -20)
-	   }); 	
-				  <% if(shopRs[0].liveflag==1){%>
-				 	marker.setIcon("../images/close.jpg");
-				 	<%}%>
-   		 marker.setLabel({   //设置标注 设置在地图上
-	        offset: new AMap.Pixel(-10, -20),
-	        content: '<%-shopRs[0].shopname%>'
-	    });
-		function eventHandler(e){
-		//alert(e.lng);
-		$('#myModal').modal('show');
-		pubform.lng.value=e.lnglat.getLng();
-		pubform.lat.value=e.lnglat.getLat();
-		//$('#point').val(evt.lnglat);
-	}
-	    		
-	    		}
-
-   	//  AMap.event.addDomListener(document.getElementById('clearMarker'), 'click', function() {
-    //      if(liveflag == 1) {
-    //         //marker.setMap(null);
-    //         //marker = null;
-    //         marker.setIcon('http://localhost:3000/images/close.jpg');
-    //     } 
-    //     if(liveflag == 2){
-    //     	  marker.setIcon('http://localhost:3000/images/stop.PNG');
-    //     }
-    //     if(liveflag == -1){
-    //     	  marker.setIcon('http://localhost:3000/images/forced.jpg');
-    //     }
-    // }, false);
-	
-	//var listener = AMap.event.addListener(map,"click",eventHandler);
-	//事件监听							//事件监听只能使用click
-	function dian(){
-		var marker = new AMap.Marker({                 
-		  map:map,                 
-		  position:evt.lnglat,  
-		  title:$('#name').val(),
-		  icon:"http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",//图标
-		  offset:new AMap.Pixel(-10, -20)
-	   }); 
-		marker.setMap(map);
-	}
-	function Revise(){
-		$.post('/home/revise',$('pubformto').serialize(),function(rhtml){
-			if(rehtml == 1) {				  //将文本转换为对象
-				alert('修改成功');
-				//$('#myModal').modal('hide');
-			} else {
-				alert('修改失败');
-			}
-		});
-		return false;
-	}
-	function onSubPub(){
-	if(pubform.shopname.value==''){
-		alert('营业点名称不允许空');
-		pubform.shopname.focus();
-		return false;
-	}
-	if(pubform.shopintr.value==''){
-		alert('营业点简介不允许空');
-		pubform.shopintr.focus();
-		return false;
-	}
-	if(pubform.shoptype.value==0){
-		alert('请选择营业类别');
-		pubform.shoptype.focus();
-		return false;
-	}
-	return true;
-} 
+function eventHandler(e){
+	alert(e.lng);
+	pubform.lng.value=e.lnglat.getLng();
+	pubform.lat.value=e.lnglat.getLat();
+	$('#myModal').modal('show');
+}
+//var listener = AMap.event.addListener(map,"click",eventHandler);
 </script>
-
-	  	<!-- 模态框（Modal） -->
- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<form name='changeform' id="changeform" action="/home/revise"  method="post" enctype="multipart/form-data" onsubmit="return onSubPub()" >
-			<!-- multipart/form-data  二进制表单 传图片的 -->
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title" id="myModalLabel">
-							修改营业点信息
-						</h4>
-					</div>
-					<div class="modal-body">
-						<div class="form-group" id="myform">
-					    <input type="text" class="form-control" name="shopname" placeholder="请输入营业点名称" value="<%-shopRs[0].shopname%>">
-					    
-					    <textarea class="form-control" name="shopintr" rows="5" placeholder="请输入营业简介">
-					      <%-shopRs[0].shopintr%>
-					    </textarea>
-					    <input type="text" class="form-control" name="keywords" placeholder="请输入查询关键词" value="<%-shopRs[0].keywords%>">
-				       <select class="form-control" name="shoptype" id="shoptype">
-					      <option value="0">请选择经营类别</option>  <!-- 下拉框 -->
-					     <% shoptypeRs.forEach(function(row){ %>   <!-- 结果遍历 -->
-					     <% if(row.id==shopRs[0].shoptype){ %>
-					      <option value="<%-row.id%>" selected>
-					      	 <%-row.typename%>
-					      	 </option>
-					      	 <%} else { %>
-					      	 <option value="<%-row.id%>">
-					      <%-row.typename%>
-					      </option>
-					        <% } %>
-					      <% }) %>  <!-- 根据id 获得类型 -->
-					    </select>
-					    <label for="lastname" class="col-sm-2 control-label">店铺图片</label>
-					    <input type="file" name="photourl">
-					   <!--  <input type="hidden" name="lng">隐藏域  存放经纬度
-					    <input type="hidden" name="lat"> -->
-					  </div>
-					</div>
-					<div class="modal-footer" style="text-align: center;">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭
-						</button>
-						<button type="submit" class="btn btn-primary" onsubmit="return revise()" >
-							修改
-						</button>
-					</div>
-				</div><!-- /.modal-content -->
-				</form>
-
-
-				<form name="closeform"  id="closeform" action="/home/closeshop" method="post"  >
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-								&times;
-							</button>
-							<h4 class="modal-title" id="myModalLabel">
-								关闭营业点
-							</h4>
-							</div>
-						<div class="modal-body">
-							<div class="form-group" id="myform">
-							    <textarea class="form-control" name="shopintr" rows="5" placeholder="请输入关停理由">
-							    </textarea>
-						    </div>
-					    </div>
-					    <div class="modal-footer">
-							 <button type="submit" class="btn btn-info" data-dismiss="modal" >
-							    暂停营业
-						    </button>
-						</div>
-					</div>
-				</form>
-
-
-			</div><!-- /.modal -->
-		</div>
-
-</body>
-</html>
-

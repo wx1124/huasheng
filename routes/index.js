@@ -3,10 +3,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	//console.log(req.session.loginbean);
-	//res.send('hello,华盛');
-	res.locals.loginbean = req.session.loginbean;
-    res.render('index',{});
+  res.locals.loginbean = req.session.loginbean;
+  res.render('index', {});
+});
+router.get('/aa', function(req, res, next) {
+  res.render('aa',{name:'张三李四'});
 });
 
-module.exports = router;//导出router
+module.exports = router;

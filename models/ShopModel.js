@@ -2,7 +2,7 @@ var Sequelize = require('sequelize');
 var sequelize =require('./ModelHeader')();
 
 var ShopModel = sequelize.define('shops', {
-    id: {type:Sequelize.BIGINT,primaryKey: true},
+	id: {type:Sequelize.BIGINT,primaryKey: true},
     uid: Sequelize.BIGINT,
     shopname: Sequelize.STRING,
     photourl: Sequelize.STRING,
@@ -15,9 +15,8 @@ var ShopModel = sequelize.define('shops', {
     liveflag:Sequelize.INTEGER,
     createtime:Sequelize.DATE
 },{
-        timestamps: false,
-        //paranoid: true  //获取不到id的返回值
-    });
-
+		timestamps: false,
+		//paranoid: true  //获取不到id的返回值
+	});
 
 module.exports = ShopModel;
